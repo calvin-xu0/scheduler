@@ -3,7 +3,7 @@ import "components/Button.scss";
 const classNames = require('classnames');
 
 export default function Button(props) {
-   let buttonClass = classNames(
+   const buttonClass = classNames(
       "button",
       {
          "button--confirm": props.confirm,
