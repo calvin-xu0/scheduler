@@ -4,25 +4,6 @@ import Appointment from "components/Appointment/index";
 import "components/Application.scss";
 const axios = require('axios');
 
-// const days = [
-//   {
-//     id: 1,
-//     name: "Monday",
-//     spots: 2,
-//   },
-//   {
-//     id: 2,
-//     name: "Tuesday",
-//     spots: 5,
-//   },
-//   {
-//     id: 3,
-//     name: "Wednesday",
-//     spots: 0,
-//   },
-// ];
-
-
 const appointments = [
   {
     id: 1,
