@@ -1,4 +1,4 @@
-function getAppointmentsForDay(state, day) {
+export const getAppointmentsForDay = (state, day) => {
   const result = [];
   for (const obj of Object.values(state.days)) {
     if (obj.name === day) {
@@ -11,7 +11,7 @@ function getAppointmentsForDay(state, day) {
   return result;
 };
 
-const getInterview = (state, interview) => {
+export const getInterview = (state, interview) => {
   if (!interview) {
     return null;
   }
@@ -20,5 +20,3 @@ const getInterview = (state, interview) => {
   
   return result;
 }
-
-module.exports = {getAppointmentsForDay, getInterview};
