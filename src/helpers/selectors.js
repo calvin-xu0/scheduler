@@ -1,6 +1,6 @@
 export const getAppointmentsForDay = (state, day) => {
   const result = [];
-  for (const obj of Object.values(state.days)) {
+  for (const obj of state.days) {
     if (obj.name === day) {
       for (let appointmentId of obj.appointments) {
         result.push(state.appointments[appointmentId]);
@@ -13,7 +13,7 @@ export const getAppointmentsForDay = (state, day) => {
 
 export const getInterviewersForDay = (state, day) => {
   const interviewerCount = {};
-  for (const obj of Object.values(state.days)) {
+  for (const obj of state.days) {
     if (obj.name === day) {
       for (let appointmentId of obj.appointments) {
         if (state.appointments[appointmentId].interview) {
