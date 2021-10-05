@@ -21,10 +21,10 @@ export default function useApplicationData() {
     };
     return (axios.put(`/api/appointments/${id}`, {interview})
       .then(res => {
-        setState({...state, appointments});
-        return {...state, appointments};
+        setState({...state, appointments, days: updateSpots(id, {...state, appointments})});
+        // return {...state, appointments};
       })
-      .then(state => updateSpots(id, state))
+      // .then(state => updateSpots(id, state))
       );
   }
 
@@ -39,10 +39,11 @@ export default function useApplicationData() {
     };
     return (axios.delete(`/api/appointments/${id}`)
       .then(res => {
-        setState({...state, appointments});
-        return {...state, appointments};
+        setState({...state, appointments, days: updateSpots(id, {...state, appointments})});
+        // setState({...state, appointments});
+        // return {...state, appointments};
       })
-      .then(pendingState => updateSpots(id, pendingState))
+      // .then(pendingState => updateSpots(id, pendingState))
       );
   }
 
@@ -53,7 +54,8 @@ export default function useApplicationData() {
     const day = {...pendingState.days[foundDay.id - 1], spots: nullCount};
     const days = [...pendingState.days];
     days.splice(foundDay.id - 1, 1, day);
-    setState({...pendingState, days});
+    return days
+    // setState({...pendingState, days});
   }
 
   useEffect(() => {
