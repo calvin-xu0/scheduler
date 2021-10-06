@@ -12,18 +12,15 @@ export const getAppointmentsForDay = (state, day) => {
 };
 
 export const getInterviewersForDay = (state, day) => {
-  const interviewerCount = {};
+  const result = [];
   for (const obj of state.days) {
     if (obj.name === day) {
-      for (let appointmentId of obj.appointments) {
-        if (state.appointments[appointmentId].interview) {
-          interviewerCount[state.appointments[appointmentId].interview.interviewer]++;
-        }
+      for (let interviewerId of obj.interviewers) {
+        result.push(state.interviewers[interviewerId]);
       }
       break;
     }
   }
-  const result = Object.keys(interviewerCount).map(id => state.interviewers[id]);
   return result;
 };
 
