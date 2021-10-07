@@ -74,7 +74,7 @@ export default function useApplicationData() {
     const day = {...pendingState.days[foundDay.id - 1], spots: nullCount};
     const days = [...pendingState.days];
     days.splice(foundDay.id - 1, 1, day);
-    return days
+    return days;
   }
 
   useEffect(() => {
