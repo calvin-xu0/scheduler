@@ -54,7 +54,7 @@ export default function Appointment(props) {
       )}
       {mode === CREATE && <Form interviewers={props.interviewers} onCancel={() => transition(EMPTY)} onSave={save}/>}
       {mode === SAVING && <Status message="Saving..."/>}
-      {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onConfirm={() => trash()}/>}
+      {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onConfirm={() => trash()} onCancel={() => back()} />}
       {mode === DELETING && <Status message="Deleting..."/>}
       {mode === EDIT && <Form
         name={props.interview.student}
