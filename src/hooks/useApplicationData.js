@@ -100,7 +100,7 @@ export default function useApplicationData() {
       console.log("State", state, "Data", data)
       const appointment = {
         ...state.appointments[id],
-        interview: { ...interview }
+        interview: interview ? { ...interview } : null
       };
       const appointments = {
         ...state.appointments,
