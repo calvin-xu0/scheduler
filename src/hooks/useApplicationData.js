@@ -1,11 +1,11 @@
 import { useReducer, useEffect } from 'react';
 const axios = require('axios');
 
-export default function useApplicationData() {
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
+const SET_DAY = "SET_DAY";
+const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+const SET_INTERVIEW = "SET_INTERVIEW";
 
+export default function useApplicationData() {
   function reducer(state, action) {
     switch (action.type) {
       case SET_DAY:
@@ -21,6 +21,7 @@ export default function useApplicationData() {
         );
     }
   }
+
   const [state, dispatch] = useReducer(reducer,
     {
       day: "Monday",
@@ -29,9 +30,10 @@ export default function useApplicationData() {
       interviewers: {}
     }
   );
+
   const setDay = day => dispatch({type: SET_DAY, value: day});
 
-  function bookInterview(id, interview) {
+  const bookInterview = (id, interview) => {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -42,10 +44,12 @@ export default function useApplicationData() {
     };
     const days = updateSpots(id, {...state, appointments});
 
-    return (axios.put(`/api/appointments/${id}`, {interview})
-      .then(res => {
-        dispatch({type: SET_INTERVIEW, value: {appointments, days}})
-      })
+    return (
+      axios.put(`/api/appointments/${id}`, {interview})
+        .then(res => {
+          console.log("Socket sent:", {type: SET_INTERVIEW, value: {appointments, days}})
+          dispatch({type: SET_INTERVIEW, value: {appointments, days}})
+        })
     );
   }
 
@@ -60,10 +64,11 @@ export default function useApplicationData() {
     };
     const days = updateSpots(id, {...state, appointments});
 
-    return (axios.delete(`/api/appointments/${id}`)
-      .then(res => {
-        dispatch({type: SET_INTERVIEW, value: {appointments, days}})
-      })
+    return (
+      axios.delete(`/api/appointments/${id}`)
+        .then(res => {
+          dispatch({type: SET_INTERVIEW, value: {appointments, days}})
+        })
     );
   }
 
@@ -78,14 +83,46 @@ export default function useApplicationData() {
   }
 
   useEffect(() => {
-      Promise.all([
-        axios.get('/api/days'),
-        axios.get('/api/appointments'),
-        axios.get('/api/interviewers')
-      ]).then( all => {
-        dispatch({type: SET_APPLICATION_DATA, value: {days: all[0].data, appointments: all[1].data, interviewers: all[2].data}});
-      })
-    }, []);
+    Promise.all([
+      axios.get('/api/days'),
+      axios.get('/api/appointments'),
+      axios.get('/api/interviewers')
+    ]).then( all => {
+      const [days, appointments, interviewers] = all.map(obj => obj.data);
+      dispatch({type: SET_APPLICATION_DATA, value: {days, appointments, interviewers}});
+    })
+
+  }, []);
+
+  useEffect( () => {
+    const dispatchInterview = data => {
+      const {id, interview} = data;
+      console.log("State", state, "Data", data)
+      const appointment = {
+        ...state.appointments[id],
+        interview: { ...interview }
+      };
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+      const days = updateSpots(id, {...state, appointments});
+  
+      dispatch({type: SET_INTERVIEW, value: {appointments, days}})
+    };
+    
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    ws.onopen = evt => ws.send('ping');
+    
+    ws.onmessage = evt => {
+      const responseObj = JSON.parse(evt.data);
+      if ([SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW].includes(responseObj.type)) {
+        dispatchInterview(responseObj);
+      }
+    };
+
+    return (() => ws.close());
+  }, [state])
 
   return {state, setDay, bookInterview, cancelInterview, updateSpots}
 };
