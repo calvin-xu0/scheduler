@@ -31,20 +31,8 @@ describe("Application", () => {
     fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
     
     fireEvent.click(getByText(appointment, "Save"));
-    // const addButtonElement = getAllByAltText("Add")[0];
-    // fireEvent.click(addButtonElement);
 
-    // fireEvent.change(getByPlaceholderText("Enter Student Name"), {
-    //   target: { value: "Lydia Miller-Jones" }
-    // });
-
-    // const interviewerElement = getAllByRole("listitem")[0];
-    // fireEvent.click(interviewerElement);
-
-    // fireEvent.click(getByText("Save"));
-
-    // await waitForElement(() => getByText("Saving..."));
-    console.log(prettyDOM(container));
+    // console.log(prettyDOM(container));
   })
 
 })
