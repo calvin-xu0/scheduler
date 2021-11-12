@@ -82,7 +82,6 @@ export default function useApplicationData() {
   useEffect( () => {
     const dispatchInterview = data => {
       const {id, interview} = data;
-      console.log("State", state, "Data", data)
       const appointment = {
         ...state.appointments[id],
         interview: interview ? { ...interview } : null
