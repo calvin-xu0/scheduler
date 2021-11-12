@@ -47,7 +47,6 @@ export default function useApplicationData() {
     return (
       axios.put(`/api/appointments/${id}`, {interview})
         .then(res => {
-          console.log("Socket sent:", {type: SET_INTERVIEW, value: {appointments, days}})
           dispatch({type: SET_INTERVIEW, value: {appointments, days}})
         })
     );
