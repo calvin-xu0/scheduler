@@ -106,7 +106,7 @@ export default function useApplicationData() {
     };
 
     return (() => ws.close());
-  }, [state])
+  }, [state, updateSpots])
 
   return {state, setDay, bookInterview, cancelInterview, updateSpots}
 };
